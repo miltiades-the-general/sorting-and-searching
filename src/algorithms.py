@@ -2,7 +2,7 @@ import math
 import collections
 from heapq import heappop, heappush
 from typing import NewType, List, Dict, Tuple, int
-from utils import GraphNode, LinkedList, LinkedListNode, DisjointSet, performQuickSort, heapify, Graph, Edge
+from utils import GraphNode, LinkedList, LinkedListNode, DisjointSet, performQuickSort, heapify, countingSort, Graph, Edge
 
 class SearchingAlgorithms:
     def linearSearch(A: List[int], x: int) -> int:
@@ -214,10 +214,11 @@ class SortingAlgorithms:
         performQuickSort(A, 0, n)
         return A
 
-    def radixSort(A: List[int]) -> List[int]:
-        pass
-
     def heapSort(A: List[int]) -> List[int]:
+        """
+        Implements heapsort to return a sorted array.
+        See utils for heapify algorithm implementation 
+        """
         n = len(A)
 
         for i in range(n//2, -1, -1):
@@ -229,6 +230,56 @@ class SortingAlgorithms:
             # Heapify after reducing n by 1 and displacing the max element
             heapify(A, i, 0)
         
+        return A
+
+    def radixSort(A: List[int]):
+        max_element = max(A)
+
+        place = 1
+        while max_element // place > 0:
+            countingSort(A, place)
+            place *= 10
+        return A
+    
+    def mergeSort(self, A: List[int]) -> List[int]:
+        """
+        Implements merge sort to return a sorted array.
+        """
+        if len(A) > 1:
+
+            #  r is the point where the array is divided into two subarrays
+            r = len(A)//2
+            L = A[:r]
+            M = A[r:]
+
+            # Sort the two halves
+            self.mergeSort(L)
+            self.mergeSort(M)
+
+            i = j = k = 0
+
+            # Until we reach either end of either L or M, pick larger among
+            # elements L and M and place them in the correct position at A[p..r]
+            while i < len(L) and j < len(M):
+                if L[i] < M[j]:
+                    A[k] = L[i]
+                    i += 1
+                else:
+                    A[k] = M[j]
+                    j += 1
+                k += 1
+
+            # When we run out of elements in either L or M,
+            # pick up the remaining elements and put in A[p..r]
+            while i < len(L):
+                A[k] = L[i]
+                i += 1
+                k += 1
+
+            while j < len(M):
+                A[k] = M[j]
+                j += 1
+                k += 1
         return A
 
 

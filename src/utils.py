@@ -113,5 +113,30 @@ def heapify(A, n, i):
     if largest != i:
         A[i], A[largest] = A[largest], A[i]
         heapify(A, n, largest)
+
+
+def countingSort(A: List[int], place: int) -> List[int]:
+    size = len(A)
+    output = [0] * size
+    count = [0] * 10
+
+    # find the count of elements
+    for i in range(0, size):
+        index = A[i] // place
+        count[index % 10] += 1
+
+    # Find cumulative count
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+
+    # place the elements in sorted order
+    i = size - 1
+    while i >= 0:
+        index = A[i] // place
+        output[count[index % 10] - 1] = A[i]
+        count[index % 10] -= 1
+        i -= 1
     
+    for i in range(0, size):
+        A[i] = output[i]
 
